@@ -236,17 +236,34 @@ export interface SSH extends OutboundBasics, Dial  {
 
 export interface Selector extends OutboundBasics {
   outbounds: string[]
-  url?: string
-  interval?: string
-  tolerance?: number
-  idle_timeout?: string
+  default?: string
   interrupt_exist_connections?: boolean
 }
 
 export interface URLTest extends OutboundBasics {
   outbounds: string[]
-  default?: string
+  url?: string
+  interval?: string
+  tolerance?: number
+  idle_timeout?: string
   interrupt_exist_connections?: boolean
+  // sing-box fork fields: a faster probe period for the primary node, an
+  // allow-list of HTTP statuses a probe must answer with, and a block-list of
+  // real exit countries, checked against egress_url (a geo-IP lookup service).
+  fast_interval?: string
+  expected_status?: number[]
+  exclude_egress?: string[]
+  egress_url?: string
+  disable_race?: boolean
+  // "fallback" walks members in list order and sticks to the last site a
+  // destination succeeded on for site_memory, instead of always racing for
+  // the lowest latency.
+  mode?: "latency" | "fallback"
+  site_memory?: string
+  hedge_delay?: string
+  // fork: exits outside the group raced only when none of its members answers
+  last_resort?: string[]
+  min_speed?: number
 }
 
 // Create interfaces dynamically based on OutTypes keys

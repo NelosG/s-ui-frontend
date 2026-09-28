@@ -6,6 +6,7 @@
     :data="dnsModal.data"
     :ts-tags="tsTags"
     :rslvd-tags="rslvdTags"
+    :server-tags="dnsServerTags"
     @close="closeDnsModal"
     @save="saveDnsModal"
   />
@@ -164,7 +165,21 @@
             <v-col>{{ item.type }}</v-col>
           </v-row>
         </v-card-subtitle>
-        <v-card-text>
+        <v-card-text v-if="item.type === 'fallback'">
+          <v-row>
+            <v-col>{{ $t('dns.fallback.servers') }}</v-col>
+            <v-col>
+              {{ item.servers?.length ? item.servers.join(' -> ') : '-' }}
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>{{ $t('dns.fallback.delay') }}</v-col>
+            <v-col>
+              {{ item.delay ?? '400ms' }}
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-text v-else>
           <v-row>
             <v-col>{{ $t('dns.server') }}</v-col>
             <v-col>

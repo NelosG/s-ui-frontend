@@ -18,6 +18,9 @@
       <v-tab value="t4">
         {{ $t('setting.clashSub') }}
       </v-tab>
+      <v-tab value="t5">
+        {{ $t('setting.poolSub') }}
+      </v-tab>
     </v-tabs>
     <v-card-text>
       <v-row
@@ -356,6 +359,10 @@
         <v-window-item value="t4">
           <SubClashExtVue :settings="settings" />
         </v-window-item>
+
+        <v-window-item value="t5">
+          <PoolSubVue :settings="settings" />
+        </v-window-item>
       </v-window>
     </v-card-text>
   </v-card>
@@ -368,6 +375,7 @@ import HttpUtils from '@/plugins/httputil'
 import { FindDiff } from '@/plugins/utils'
 import SubJsonExtVue from '@/components/SubJsonExt.vue'
 import SubClashExtVue from '@/components/SubClashExt.vue'
+import PoolSubVue from '@/components/PoolSub.vue'
 import { push } from 'notivue'
 import Data from '@/store/modules/data'
 const tab = ref("t1")
@@ -402,6 +410,13 @@ const settings = ref({
   subClashSprtAll: "false",
   subClashUdp: "false",
   globalReset: "",
+  poolSubUrls: "",
+  poolSubUA: "",
+  poolSubInterval: "0",
+  poolSubProtocols: "",
+  poolSubSkip: "",
+  poolSubAddNew: "false",
+  poolSubRemoveAfter: "7",
 })
 
 // The panel settings, exactly as the block above spells them out.

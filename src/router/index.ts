@@ -46,6 +46,11 @@ const routes = [
         component: () => import('@/views/Endpoints.vue'),
       },
       {
+        path: '/health',
+        name: 'pages.health',
+        component: () => import('@/views/Health.vue'),
+      },
+      {
         path: '/rules',
         name: 'pages.rules',
         component: () => import('@/views/Rules.vue'),

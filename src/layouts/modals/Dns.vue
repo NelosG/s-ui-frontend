@@ -201,6 +201,36 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="dnsServer.type == 'fallback'">
+          <v-col
+            cols="12"
+            sm="8"
+            md="6"
+          >
+            <v-select
+              v-model="dnsServer.servers"
+              :items="availableServerTags"
+              :label="$t('dns.fallback.servers')"
+              multiple
+              chips
+              hide-details
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            sm="4"
+            md="3"
+          >
+            <v-text-field
+              v-model.number="fallbackDelay"
+              type="number"
+              min="0"
+              :label="$t('dns.fallback.delay')"
+              :suffix="$t('date.ms')"
+              hide-details
+            />
+          </v-col>
+        </v-row>
         <v-row v-if="dnsServer.type == 'tailscale' || dnsServer.type == 'resolved'">
           <v-col
             v-if="dnsServer.type == 'tailscale'"
@@ -287,6 +317,7 @@ export default {
     index: { type: Number, required: true },
     tsTags: { type: Array as PropType<string[]>, default: () => [] },
     rslvdTags: { type: Array as PropType<string[]>, default: () => [] },
+    serverTags: { type: Array as PropType<string[]>, default: () => [] },
   },
   emits: ['close', 'save'],
   data() {
@@ -297,7 +328,7 @@ export default {
       HasServer: [DnsTypes.TCP, DnsTypes.UDP, DnsTypes.TLS, DnsTypes.QUIC, DnsTypes.HTTPS, DnsTypes.HTTP3],
       HasHeaders: [DnsTypes.HTTPS, DnsTypes.HTTP3],
       HasTls: [DnsTypes.TLS, DnsTypes.QUIC, DnsTypes.HTTPS, DnsTypes.HTTP3],
-      WithoutDial: [DnsTypes.Hosts, DnsTypes.Tailscale, DnsTypes.FakeIP, DnsTypes.Resolved],
+      WithoutDial: [DnsTypes.Hosts, DnsTypes.Tailscale, DnsTypes.FakeIP, DnsTypes.Resolved, DnsTypes.Fallback],
     }
   },
   computed:{
@@ -332,6 +363,20 @@ export default {
         } else {
           this.dnsServer.predefined = undefined
         }
+      }
+    },
+    // A server cannot fall back to itself; excluded here rather than in the
+    // parent so the list still needs only the one prop it already had a use for.
+    availableServerTags(): string[] {
+      return this.serverTags.filter((t: string) => t != this.dnsServer.tag)
+    },
+    fallbackDelay: {
+      get(): number {
+        const d = this.dnsServer.delay
+        return d ? parseInt(String(d).replace('ms','')) : 400
+      },
+      set(v: number) {
+        this.dnsServer.delay = v > 0 ? v + 'ms' : '400ms'
       }
     },
   },

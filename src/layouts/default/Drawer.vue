@@ -67,6 +67,7 @@ const menu = [
   { title: 'pages.clients', icon: 'mdi-account-multiple',  path: '/clients' },
   { title: 'pages.outbounds', icon: 'mdi-cloud-upload',  path: '/outbounds' },
   { title: 'pages.endpoints', icon: 'mdi-cloud-tags',  path: '/endpoints' },
+  { title: 'pages.health', icon: 'mdi-heart-pulse',  path: '/health' },
   { title: 'pages.services', icon: 'mdi-server',  path: '/services' },
   { title: 'pages.tls', icon: 'mdi-certificate',  path: '/tls' },
   { title: 'pages.basics', icon: 'mdi-application-cog',  path: '/basics' },

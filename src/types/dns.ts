@@ -24,6 +24,7 @@ export const DnsTypes = {
   FakeIP: 'fakeip',
   Tailscale: 'tailscale',
   Resolved: 'resolved',
+  Fallback: 'fallback',
 }
 
 export type DnsType = typeof DnsTypes[keyof typeof DnsTypes]
@@ -60,6 +61,9 @@ const defaultValues: Record<DnsType, DnsServer> = {
   fakeip: { type: 'fakeip', inet4_range: '198.18.0.0/15', inet6_range: 'fc00::/18' },
   tailscale: { type: 'tailscale' },
   resolved: { type: 'resolved' },
+  // Asks the first server; the next one only fires on SERVFAIL/REFUSED or when
+  // delay passes with no good answer yet.
+  fallback: { type: 'fallback', servers: [], delay: '400ms' },
 }
 export function createDnsServer<T extends DnsServer>(type: string, json?: Partial<T>): DnsServer {
   // structuredClone, not a spread: the defaults table is module state, and a
